@@ -5,10 +5,14 @@ import "testing"
 var filename = "day01_input_test.txt"
 
 func TestDay01(t *testing.T) {
-	got := day01(filename)
+	distance, similarity := day01(filename)
 	want := 11
-	if got != want {
-		t.Errorf("got: %d, want: %d", got, want)
+	if distance != want {
+		t.Errorf("got: %d, want: %d", distance, want)
+	}
+	want = 31
+	if similarity != want {
+		t.Errorf("got: %d, want: %d", similarity, want)
 	}
 }
 
