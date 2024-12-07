@@ -1,5 +1,19 @@
 # Day 01
 
+To run the tests, run the following:
+
+```shell
+go test ./...
+```
+
+If you want to run the benchmarks too:
+
+```shell
+go test -bench=. ./...
+```
+
+---
+
 --- Day 1: Historian Hysteria ---
 
 The Chief Historian is always present for the big Christmas sleigh launch, but nobody has seen him in months! Last
