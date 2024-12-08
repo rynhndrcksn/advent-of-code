@@ -1,13 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"log"
-	"os"
 	"slices"
-	"strconv"
-	"strings"
 
 	"github.com/rynhndrcksn/advent-of-code/internal"
 )
@@ -19,42 +14,17 @@ func main() {
 	fmt.Println("Part 2 Results:", similarity)
 }
 
-func day01(fileName string) (int, int) {
-	// Open the file and prepare for iterating over it.
-	file, err := os.Open(fileName)
-	if err != nil {
-		log.Fatalf("err opening filename: %s", err.Error())
-	}
-	defer func(file *os.File) {
-		err = file.Close()
-		if err != nil {
-			log.Fatalf("err while closing filename: %s", err.Error())
-		}
-	}(file)
-
-	// Prepare some variables to keep track of things, and iterate over the scanner.
+func day01(filename string) (int, int) {
+	parts := internal.ReadFileLinesAsInts(filename)
 	col1Ints := make([]int, 0, 10)
 	col2Ints := make([]int, 0, 10)
 	col1Occurrences := make(map[int]int)
 	col2Occurrences := make(map[int]int)
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		parts := strings.Split(scanner.Text(), "   ")
 
-		// Parse the first int and add it to the col1Ints slice.
-		var num1 int
-		num1, err = strconv.Atoi(parts[0])
-		if err != nil {
-			log.Fatalf("err converting parts[0] to int: %s", parts[0])
-		}
+	for i := 0; i < len(parts); i += 2 {
+		num1 := parts[i]
+		num2 := parts[i+1]
 		col1Ints = append(col1Ints, num1)
-
-		// Parse the second int and add it to the col2Ints slice.
-		var num2 int
-		num2, err = strconv.Atoi(parts[1])
-		if err != nil {
-			log.Fatalf("err converting parts[1] to int: %s", parts[1])
-		}
 		col2Ints = append(col2Ints, num2)
 
 		// Update the maps tracking number occurrences.
@@ -70,14 +40,15 @@ func day01(fileName string) (int, int) {
 		}
 	}
 
-	// Make sure scanner didn't encounter any issues.
-	if err = scanner.Err(); err != nil {
-		log.Fatalf("err from bufio scanner: %s", err.Error())
-	}
-
 	// Sort each column.
 	slices.Sort(col1Ints)
 	slices.Sort(col2Ints)
+
+	// Compute distance.
+	var distance int
+	for k := range col1Ints {
+		distance += internal.AbsInt(col1Ints[k] - col2Ints[k])
+	}
 
 	// Compute similarity score.
 	var similarity int
@@ -86,12 +57,6 @@ func day01(fileName string) (int, int) {
 		for i := 0; i < v; i++ {
 			similarity += k * num
 		}
-	}
-
-	// Iterate over the slices and grab the distance.
-	var distance int
-	for k := range col1Ints {
-		distance += internal.AbsInt(col1Ints[k] - col2Ints[k])
 	}
 
 	return distance, similarity
