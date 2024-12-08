@@ -41,12 +41,11 @@ func BenchmarkAbsInt(b *testing.B) {
 }
 
 func TestReadFileLinesAsInts(t *testing.T) {
-	filename := "read_file_lines_as_ints.txt"
-	slice := ReadFileLinesAsInts(filename)
-	want := 10
+	slice := ReadFileLinesAsInts("read_file_lines_as_ints.txt")
+	expectedLen := 10
 	t.Run("has correct length", func(t *testing.T) {
-		if len(slice) != want {
-			t.Errorf("got: %d, want: %d", len(slice), want)
+		if len(slice) != expectedLen {
+			t.Errorf("got: %d, expectedLen: %d", len(slice), expectedLen)
 		}
 	})
 	t.Run("has correct elements", func(t *testing.T) {
@@ -56,5 +55,36 @@ func TestReadFileLinesAsInts(t *testing.T) {
 			}
 		}
 	})
+}
 
+func BenchmarkReadFileLinesAsInts(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ReadFileLinesAsInts("read_file_lines_as_ints.txt")
+	}
+}
+
+func TestReadFileLinesAsWords(t *testing.T) {
+	slice := ReadFileLinesAsWords("read_file_lines_as_words.txt")
+	expectedLen := 8
+	t.Run("has correct length", func(t *testing.T) {
+		if len(slice) != expectedLen {
+			t.Errorf("got: %d, want: %d", len(slice), expectedLen)
+		}
+	})
+
+	// File contents: This is a file that contains eight words.
+	expectedElems := []string{"This", "is", "a", "file", "that", "contains", "eight", "words."}
+	t.Run("has correct elements", func(t *testing.T) {
+		for i := 0; i < len(slice); i++ {
+			if slice[i] != expectedElems[i] {
+				t.Errorf("got: %s, want: %s", slice[i], expectedElems[i])
+			}
+		}
+	})
+}
+
+func BenchmarkReadFileLinesAsWords(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		ReadFileLinesAsWords("read_file_lines_as_words.txt")
+	}
 }
