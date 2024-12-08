@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Advent of Code - Day 01")
+	fmt.Println("Advent of Code - Day 02")
 	safeCount := day02("input.txt")
 	fmt.Println("Day 02 Result:", safeCount)
 }
