@@ -1,5 +1,13 @@
 package internal
 
+import (
+	"bufio"
+	"log"
+	"os"
+	"strconv"
+	"strings"
+)
+
 // AbsInt takes an integer and returns it's absolute value.
 // For example: -4 returns 4, 5 returns 5, etc.
 func AbsInt(n int) int {
@@ -7,4 +15,39 @@ func AbsInt(n int) int {
 		return -n
 	}
 	return n
+}
+
+// ReadFileLinesAsInts takes a filename, parses it, and returns a slice of ints.
+// Note: splits the line up by whitespace using strings.Fields(), keep this in mind.
+func ReadFileLinesAsInts(filename string) []int {
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatalf("err opening filename: %s", err.Error())
+	}
+	defer func(file *os.File) {
+		err = file.Close()
+		if err != nil {
+			log.Fatalf("err while closing filename: %s", err.Error())
+		}
+	}(file)
+
+	parts := make([]int, 0, 16)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		for _, field := range strings.Fields(scanner.Text()) {
+			var num int // Declare this here so `err` isn't a shadowed variable.
+			num, err = strconv.Atoi(field)
+			if err != nil {
+				log.Fatalf("error converting string to int: %s", err)
+			}
+			parts = append(parts, num)
+		}
+	}
+
+	// Make sure scanner didn't encounter any issues.
+	if err = scanner.Err(); err != nil {
+		log.Fatalf("err from bufio scanner: %s", err.Error())
+	}
+
+	return parts
 }

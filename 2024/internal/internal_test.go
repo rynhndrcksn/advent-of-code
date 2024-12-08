@@ -39,3 +39,22 @@ func BenchmarkAbsInt(b *testing.B) {
 		AbsInt(rand.IntN(100))
 	}
 }
+
+func TestReadFileLinesAsInts(t *testing.T) {
+	filename := "read_file_lines_as_ints.txt"
+	slice := ReadFileLinesAsInts(filename)
+	want := 10
+	t.Run("has correct length", func(t *testing.T) {
+		if len(slice) != want {
+			t.Errorf("got: %d, want: %d", len(slice), want)
+		}
+	})
+	t.Run("has correct elements", func(t *testing.T) {
+		for i := 0; i < len(slice); i++ {
+			if i != slice[i] {
+				t.Errorf("got: %d, want: %d", slice[i], i)
+			}
+		}
+	})
+
+}
