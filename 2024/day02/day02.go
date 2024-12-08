@@ -11,8 +11,8 @@ import (
 
 func main() {
 	fmt.Println("Advent of Code - Day 01")
-	safeCount := day02("day02_input.txt")
-	fmt.Println("Part 1 Result:", safeCount)
+	safeCount := day02("input.txt")
+	fmt.Println("Day 02 Result:", safeCount)
 }
 
 func day02(filename string) int {
@@ -29,10 +29,10 @@ func day02(filename string) int {
 	}(file)
 
 	// Prepare some variables to keep track of things, and iterate over the scanner.
-	rowIsSafe := make([]bool, 0, 10)
 	scanner := bufio.NewScanner(file)
+	safeNum := 0
 	for scanner.Scan() {
-		parts := make([]int, 0, 10)
+		parts := make([]int, 0, 16)
 		for _, field := range strings.Fields(scanner.Text()) {
 			var num int // Declare this here so `err` isn't a shadowed variable.
 			num, err = strconv.Atoi(field)
@@ -41,67 +41,61 @@ func day02(filename string) int {
 			}
 			parts = append(parts, num)
 		}
-		partsLen := len(parts)
 
-		// If numbers are ascending
-		if parts[0] < parts[1] {
-			for i := 0; i < partsLen-1; i++ {
-				// If order isn't right, fail.
-				if parts[i] > parts[i+1] {
-					rowIsSafe = append(rowIsSafe, false)
-					break
-				}
-				// If the numbers are the same, fail.
-				if parts[i] == parts[i+1] {
-					rowIsSafe = append(rowIsSafe, false)
-					break
-				}
-				// Numbers can only have a difference of 1, 2, or 3.
-				if abs(parts[i]-parts[i+1]) > 3 {
-					rowIsSafe = append(rowIsSafe, false)
-					break
-				}
-				// If we made it this far, it's a safe row.
-				if i == partsLen-2 {
-					rowIsSafe = append(rowIsSafe, true)
-				}
+		safe := checkPart(parts)
+
+		// If it's safe, no need to run the second loop below.
+		if safe {
+			safeNum++
+			continue
+		}
+
+		for i := range len(parts) {
+			newParts := make([]int, 0, len(parts)-1)
+			newParts = append(newParts, parts[:i]...)
+			newParts = append(newParts, parts[i+1:]...)
+
+			if checkPart(newParts) {
+				safeNum++
+				break
 			}
-		} else if parts[0] > parts[1] { // If numbers are descending
-			for i := 0; i < partsLen-1; i++ {
-				// If order isn't right, fail.
-				if parts[i] < parts[i+1] {
-					rowIsSafe = append(rowIsSafe, false)
-					break
-				}
-				// If the numbers are the same, fail.
-				if parts[i] == parts[i+1] {
-					rowIsSafe = append(rowIsSafe, false)
-					break
-				}
-				// Numbers can only have a difference of 1, 2, or 3.
-				if abs(parts[i]-parts[i+1]) > 3 {
-					rowIsSafe = append(rowIsSafe, false)
-					break
-				}
-				// If we made it this far, it's a safe row.
-				if i == partsLen-2 {
-					rowIsSafe = append(rowIsSafe, true)
-				}
-			}
-		} else {
-			// Numbers are the same
-			rowIsSafe = append(rowIsSafe, false)
 		}
 	}
 
-	safeReports := 0
-	for _, v := range rowIsSafe {
-		if v == true {
-			safeReports += 1
-		}
-	}
+	return safeNum
+}
 
-	return safeReports
+func checkPart(parts []int) bool {
+	prevNum := 0
+	isIncreasing := false
+	for i, num := range parts {
+		if i == 0 {
+			prevNum = num
+			continue
+		}
+
+		if prevNum == num {
+			return false
+		}
+
+		if abs(prevNum-num) > 3 {
+			return false
+		}
+
+		if i == 1 {
+			isIncreasing = num > prevNum
+
+			prevNum = num
+			continue
+		}
+
+		if (num > prevNum) != isIncreasing {
+			return false
+		}
+
+		prevNum = num
+	}
+	return true
 }
 
 // abs returns the absolute version of an int.
