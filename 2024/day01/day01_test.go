@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 var filename = "input_test.txt"
 
@@ -13,35 +15,6 @@ func TestDay01(t *testing.T) {
 	want = 31
 	if similarity != want {
 		t.Errorf("got: %d, want: %d", similarity, want)
-	}
-}
-
-func TestAbs(t *testing.T) {
-	tests := map[string]struct {
-		input int
-		want  int
-	}{
-		"negative int": {
-			input: -5,
-			want:  5,
-		},
-		"positive int": {
-			input: 5,
-			want:  5,
-		},
-		"zero": {
-			input: 0,
-			want:  0,
-		},
-	}
-
-	for name, test := range tests {
-		t.Run(name, func(t *testing.T) {
-			got := abs(test.input)
-			if got != test.want {
-				t.Errorf("got: %d, want: %d", got, test.want)
-			}
-		})
 	}
 }
 

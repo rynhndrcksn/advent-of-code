@@ -8,6 +8,8 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/rynhndrcksn/advent-of-code/internal"
 )
 
 func main() {
@@ -89,17 +91,8 @@ func day01(fileName string) (int, int) {
 	// Iterate over the slices and grab the distance.
 	var distance int
 	for k := range col1Ints {
-		distance += abs(col1Ints[k] - col2Ints[k])
+		distance += internal.AbsInt(col1Ints[k] - col2Ints[k])
 	}
 
 	return distance, similarity
-}
-
-// abs returns the absolute version of an int.
-// For example, -4 => 4 and 5 => 5.
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
 }

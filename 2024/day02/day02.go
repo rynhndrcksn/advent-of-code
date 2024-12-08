@@ -7,6 +7,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/rynhndrcksn/advent-of-code/internal"
 )
 
 func main() {
@@ -78,7 +80,7 @@ func checkPart(parts []int) bool {
 			return false
 		}
 
-		if abs(prevNum-num) > 3 {
+		if internal.AbsInt(prevNum-num) > 3 {
 			return false
 		}
 
@@ -96,13 +98,4 @@ func checkPart(parts []int) bool {
 		prevNum = num
 	}
 	return true
-}
-
-// abs returns the absolute version of an int.
-// For example, -4 => 4 and 5 => 5.
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
 }
