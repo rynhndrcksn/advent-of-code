@@ -7,32 +7,6 @@ import (
 	"github.com/rynhndrcksn/advent-of-code/internal"
 )
 
-func TestPart01(t *testing.T) {
-	got := part01("input_test.txt")
-	want := 161
-	if got != want {
-		t.Errorf("got: %d, want: %d", got, want)
-	}
-}
-
-func BenchmarkPart01(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		part01("input_test.txt")
-	}
-}
-
-func TestPart01Regex(t *testing.T) {
-	lines := internal.ReadFileLinesAsLines("input_test.txt")
-	var got []string
-	for _, line := range lines {
-		got = part01Regex.FindAllString(line, -1)
-	}
-	want := 4
-	if len(got) != want {
-		t.Errorf("got: %d, want: %d", len(got), want)
-	}
-}
-
 func TestExtractNumbers(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -79,5 +53,57 @@ func TestExtractNumbers(t *testing.T) {
 func BenchmarkExtractNumbers(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		extractNumbers([]string{"mul(2,4)", "mul(5,5)", "mul(11,8)", "mul(8,5)"})
+	}
+}
+
+func TestPart01(t *testing.T) {
+	got := part01("input_test.txt")
+	want := 161
+	if got != want {
+		t.Errorf("got: %d, want: %d", got, want)
+	}
+}
+
+func BenchmarkPart01(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		part01("input_test.txt")
+	}
+}
+
+func TestPart02(t *testing.T) {
+	got := part02("input_test.txt")
+	want := 48
+	if got != want {
+		t.Errorf("got: %d, want: %d", got, want)
+	}
+}
+
+func BenchmarkPart02(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		part02("input_test.txt")
+	}
+}
+
+func TestPart01Regex(t *testing.T) {
+	lines := internal.ReadFileLinesAsLines("input_test.txt")
+	var got []string
+	for _, line := range lines {
+		got = part01Regex.FindAllString(line, -1)
+	}
+	want := 4
+	if len(got) != want {
+		t.Errorf("got: %d, want: %d", len(got), want)
+	}
+}
+
+func TestPart02Regex(t *testing.T) {
+	lines := internal.ReadFileLinesAsLines("input_test.txt")
+	var got []string
+	for _, line := range lines {
+		got = part02Regex.FindAllString(line, -1)
+	}
+	want := 6
+	if len(got) != want {
+		t.Errorf("got: %d, want: %d", len(got), want)
 	}
 }
