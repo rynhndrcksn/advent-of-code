@@ -17,8 +17,34 @@ func AbsInt(n int) int {
 	return n
 }
 
-// ReadFileLinesAsInts takes a filename, parses it, and returns a slice of ints.
-// Note: splits the line up by whitespace using strings.Fields(), keep this in mind.
+// ReadFileLinesAsLines takes a filename, parses it by newlines, and returns a slice of lines.
+func ReadFileLinesAsLines(filename string) []string {
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatalf("err opening filename: %s", err.Error())
+	}
+	defer func(file *os.File) {
+		err = file.Close()
+		if err != nil {
+			log.Fatalf("err while closing filename: %s", err.Error())
+		}
+	}(file)
+
+	parts := make([]string, 0, 16)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		parts = append(parts, scanner.Text())
+	}
+
+	// Make sure scanner didn't encounter any issues.
+	if err = scanner.Err(); err != nil {
+		log.Fatalf("err from bufio scanner: %s", err.Error())
+	}
+
+	return parts
+}
+
+// ReadFileLinesAsInts takes a filename, parses it by whitespace, and returns a slice of ints.
 func ReadFileLinesAsInts(filename string) []int {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -52,7 +78,7 @@ func ReadFileLinesAsInts(filename string) []int {
 	return parts
 }
 
-// ReadFileLinesAsWords takes a filename, parses it, and returns a slice of the words.
+// ReadFileLinesAsWords takes a filename, parses it by whitespace, and returns a slice of the words.
 func ReadFileLinesAsWords(filename string) []string {
 	file, err := os.Open(filename)
 	if err != nil {
