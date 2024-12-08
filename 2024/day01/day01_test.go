@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-var filename = "day01_input_test.txt"
+var filename = "input_test.txt"
 
 func TestDay01(t *testing.T) {
 	distance, similarity := day01(filename)

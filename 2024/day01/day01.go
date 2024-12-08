@@ -12,7 +12,7 @@ import (
 
 func main() {
 	fmt.Println("Advent of Code - Day 01")
-	distance, similarity := day01("day01_input.txt")
+	distance, similarity := day01("input.txt")
 	fmt.Println("Part 1 Result:", distance)
 	fmt.Println("Part 2 Results:", similarity)
 }
